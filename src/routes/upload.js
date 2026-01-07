@@ -16,7 +16,7 @@ router.post(
   "/",
   requireAuth,
   requireRole("creator"),
-  upload.single("image"),
+  upload.single("file"),
   async (req, res) => {
     try {
       if (!req.file) {
