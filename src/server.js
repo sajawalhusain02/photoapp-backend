@@ -8,32 +8,37 @@ const { CosmosClient } = require("@azure/cosmos");
 const uploadRoute = require("./routes/upload");
 const mediaRoute = require("./routes/media");
 const authRoutes = require("./routes/auth");
-
 const photosRoutes = require("./routes/photos");
 const commentsRoutes = require("./routes/comments");
 const ratingsRoutes = require("./routes/ratings");
 
 const app = express();
 
+// ---- CORS CONFIG ----
+const allowedOrigins = [
+  "http://localhost:5173",                                  // local frontend
+  "https://stcw2photos123.z28.web.core.windows.net",        // Azure static site
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// ✅ FIX: use regex for OPTIONS (works with your version)
-app.options(/.*/, cors());
+// Preflight for all routes
+app.options("*", cors());
 
+// ---- MIDDLEWARE ----
 app.use(express.json());
 
-// Routes
+// ---- ROUTES ----
 app.use("/api/auth", authRoutes);
 app.use("/upload", uploadRoute);
 app.use("/api/media", mediaRoute);
-
 app.use("/api/photos", photosRoutes);
 app.use("/api/comments", commentsRoutes);
 app.use("/api/ratings", ratingsRoutes);
