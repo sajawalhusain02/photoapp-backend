@@ -30,7 +30,8 @@ app.use(
 );
 
 // Preflight for all routes
-app.options("*", cors());
+app.options(/.*/, cors());
+
 
 // ---- MIDDLEWARE ----
 app.use(express.json());
